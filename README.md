@@ -50,3 +50,54 @@ Two implementations will be defined for the ServiceLocator:
 - SimpleServiceLocator
 - CachedServiceLocator
 The difference between them is that on the second, whether a constant is registered or a factory, when an object associated with the name is required, **the same instance is always returned**. In the first implementation, this only happen when a name of a constant was registered, if a factory is registered, different objects will be attained.
+
+## Second version
+It is worth noting that, in the previous version, there is no control at all upon the ServiceLocator configuration (all are Objects in the end) and, therefore, the compiler is unable to detect whether the configuration is wrong or not.
+This second section is aimed to achieve the **type security** in compilation time and to explore some things like:
+- The generic class Class<T> in order to use "type literals" so as to mark the type in runtime (see Class Literals as Runtime-Type Tokens).
+- Avoid using "raw types" in order to refer to generic classes without instanciating the type parameter (see Raw Types).
+- -Xlint:unchecked directive from the compiler so as to point out the generics use. It usually is not enabled to allow that the old code, with no generics, does not arise problems (see Unchecked Error Messages).
+- @SupressWarnings("unchecked") annotation so as to mark instructions that the compiler detect as warnings but, as for the program context, it is known that it does not create problems (see Predefined Annotation Types).
+
+The classes and interfaces for this version will be in the servicelocator2 package and will be:
+
+![image](https://github.com/mvp17/serviceLocator/assets/45287481/296679c5-6169-4271-9318-51e42d63f4c8)
+
+Note that now the factories will be able to do:
+
+![image](https://github.com/mvp17/serviceLocator/assets/45287481/a9e29a4f-9262-4a3c-9c65-177bf649b12e)
+
+since now there is no chance for a ClassClastException when objects are required to the ServiceLocator.
+
+Besides, there will be two versions of this new ServiceLocator:
+- SimpleServiceLocator
+- CachedServiceLocator
+With the same features described previously.
+
+# Requirements
+IntelliJ project with the ServiceLocator's four different implementations code
+- servicelocator
+  - LocatorError
+  - Factory
+  - ServiceLocator
+  - SimpleServiceLocator
+  - CachedServiceLocator
+- servicelocator2
+  - LocatorError
+  - Factory<T>
+  - ServiceLocator
+  - SimpleServiceLocator
+  - CachedServiceLocator
+- Test classes where the well behaviours of the implementations are checked.
+  - In this code, it will be defined the interfaces and classes implementations for the tests, their factories, etc.
+  - Try to avoid duplicated code in the tests (remember that test classes are like the other classes).
+- Small report showing the final design, main difficulties found, how they have been solved, design considerations, etc.
+
+# Links
+Links used previously:
+- Class Literals as Runtime-Type Tokens
+  - https://docs.oracle.com/javase/tutorial/extra/generics/literals.html
+- Raw Types and Unchecked Error Messages
+  - https://docs.oracle.com/javase/tutorial/java/generics/rawTypes.html
+- Predefined Annotation Types
+  - https://docs.oracle.com/javase/tutorial/java/annotations/predefined.html
